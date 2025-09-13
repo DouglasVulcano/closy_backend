@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | reCAPTCHA
+    |--------------------------------------------------------------------------
+    |
+    | reCAPTCHA is a free service that protects websites from spam and abuse.
+    |
+    */
+    'recaptcha_secret_token_v3' => env('RECAPTCHA_SECRET_KEY', ''),
+    'recaptcha_score' => env('RECAPTCHA_SCORE', 0.5),
 ];
