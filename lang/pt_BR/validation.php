@@ -168,5 +168,6 @@ return [
         'campaign_unavailable' => 'Campanha indisponível',
         'slug_unavailable' => 'Link indisponível',
         'lead_unavailable' => 'Lead indisponível',
+        'message_template_unavailable' => 'Modelo de mensagem indisponível',
     ],
 ];

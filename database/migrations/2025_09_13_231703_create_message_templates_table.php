@@ -11,22 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leads', function (Blueprint $table) {
+        Schema::create('message_templates', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
-
-            $table->foreignId('campaign_id')
-                ->constrained()
-                ->onDelete('cascade');
-
-            $table->string('name');
-            $table->string('email');
-            $table->string('celular');
-            $table->enum('status', ['new', 'contacted', 'qualified', 'converted', 'lost'])->default('new');
-            $table->json('question_responses');
+            $table->string('title');
+            $table->longText('content');
+            $table->string('variables')->nullable();
+            $table->enum('type', ['whatsapp', 'email', 'instagram'])->default('whatsapp');
             $table->timestamps();
         });
     }
@@ -36,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('leads');
+        Schema::dropIfExists('message_templates');
     }
 };
