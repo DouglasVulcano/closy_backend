@@ -167,5 +167,6 @@ return [
         'password_min_length' => 'A senha deve ter pelo menos 8 caracteres',
         'campaign_unavailable' => 'Campanha indisponível',
         'slug_unavailable' => 'Link indisponível',
+        'lead_unavailable' => 'Lead indisponível',
     ],
 ];
