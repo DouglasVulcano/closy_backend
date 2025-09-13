@@ -4,18 +4,10 @@ namespace App\Repositories;
 
 use App\Models\User;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-    public function findById(int $id): User
+    protected function getModelClass(): string
     {
-        return User::findOrFail($id);
-    }
-
-    public function update(int $id, array $data): User
-    {
-        $user = $this->findById($id);
-        $user->update($data);
-        $user->refresh();
-        return $user;
+        return User::class;
     }
 }

@@ -165,5 +165,7 @@ return [
         'logout_failure' => 'Logout falhou',
         'password_confirmation_mismatch' => 'A confirmação da senha não confere',
         'password_min_length' => 'A senha deve ter pelo menos 8 caracteres',
+        'campaign_unavailable' => 'Campanha indisponível',
+        'slug_unavailable' => 'Link indisponível',
     ],
 ];
