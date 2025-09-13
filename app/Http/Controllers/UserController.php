@@ -2,71 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\BaseAuthenticatedRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Get the authenticated user's profile
-     */
-    public function profile(Request $request): JsonResponse
+    public function __construct(private UserService $userService) {}
+
+    public function profile(BaseAuthenticatedRequest $request): JsonResponse
     {
-        return response()->json($request->user(), JsonResponse::HTTP_OK);
+        $user = $this->userService->findById($request->validated()['user_id']);
+        return response()->json($user, JsonResponse::HTTP_OK);
     }
 
-    /**
-     * Update the authenticated user's profile
-     */
-    public function updateProfile(Request $request): JsonResponse
+    public function updateProfile(UpdateUserRequest $request): JsonResponse
     {
-        $user = $request->user();
-        
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => 'sometimes|string|min:8|confirmed',
-        ]);
-
-        if ($request->has('name')) {
-            $user->name = $request->name;
-        }
-
-        if ($request->has('email')) {
-            $user->email = $request->email;
-        }
-
-        if ($request->has('password')) {
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->save();
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => $user
-        ], JsonResponse::HTTP_OK);
+        $user = $this->userService->update($request->validated()['user_id'], $request->validated());
+        return response()->json(['message' => __('user.updated'), 'user' => $user], JsonResponse::HTTP_OK);
     }
 
-    /**
-     * Delete the authenticated user's account
-     */
-    public function deleteAccount(Request $request): JsonResponse
+    public function deleteAccount(BaseAuthenticatedRequest $request): JsonResponse
     {
-        $user = $request->user();
-        
-        // Delete all user's tokens
+        $user = $this->userService->findById($request->validated()['user_id']);
         $user->tokens()->delete();
-        
-        // Delete the user
         $user->delete();
-
-        return response()->json([
-            'message' => 'Account deleted successfully'
-        ], JsonResponse::HTTP_OK);
+        return response()->json(['message' => __('user.deleted')], JsonResponse::HTTP_OK);
     }
 }

@@ -3,8 +3,8 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserController::class, 'profile']);
-    Route::put('/user', [UserController::class, 'updateProfile']);
-    Route::delete('/user', [UserController::class, 'deleteAccount']);
+Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'profile']);
+    Route::put('/', [UserController::class, 'updateProfile']);
+    Route::delete('/', [UserController::class, 'deleteAccount']);
 });
