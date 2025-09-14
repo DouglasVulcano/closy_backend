@@ -29,7 +29,7 @@ max_attempts=30
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
-    if php /usr/local/bin/test-db.php; then
+    if php /var/www/html/docker/test-db.php; then
         echo "Database connection established!"
         break
     fi

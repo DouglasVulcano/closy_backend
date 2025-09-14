@@ -46,7 +46,7 @@ RUN mkdir -p /var/www/html/storage/app/temp \
     && mkdir -p /var/log/nginx \
     && chown -R www-data:www-data /var/www/html/storage \
     && chown -R www-data:www-data /var/log/supervisor \
-    && chmod +x /usr/local/bin/start.sh /usr/local/bin/fix-permissions.sh /usr/local/bin/test-db.php
+    && chmod +x /usr/local/bin/start.sh /usr/local/bin/fix-permissions.sh
 
 # Expose port 80
 EXPOSE 80
