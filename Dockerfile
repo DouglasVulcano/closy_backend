@@ -27,7 +27,6 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start.sh /usr/local/bin/start.sh
 COPY docker/fix-permissions.sh /usr/local/bin/fix-permissions.sh
-COPY docker/test-db.php /usr/local/bin/test-db.php
 
 # Copy application files
 COPY . /var/www/html
