@@ -25,6 +25,15 @@ class Plan extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'stripe_price_id',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
