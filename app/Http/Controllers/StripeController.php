@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BaseAuthenticatedRequest;
-use App\Http\Requests\Stripe\StripeRequest;
+use App\Http\Requests\Stripe\StripePlanRequest;
+use App\Http\Requests\Stripe\StripePortalRequest;
 use App\Models\User;
 use App\Services\PlanService;
 use App\Services\UserService;
@@ -20,7 +20,7 @@ class StripeController extends Controller
     /**
      * Create checkout session
      */
-    public function checkout(StripeRequest $request): JsonResponse
+    public function checkout(StripePlanRequest $request): JsonResponse
     {
         $user = $this->userService->findById($request->validated()['user_id']);
         $plan = $this->planService->findById($request->validated()['plan_id']);
@@ -59,26 +59,19 @@ class StripeController extends Controller
     /**
      * Create customer portal session
      */
-    public function portal(BaseAuthenticatedRequest $request): JsonResponse
+    public function portal(StripePortalRequest $request): JsonResponse
     {
         $user = $this->userService->findById($request->validated()['user_id']);
-        
-        if (!$user->subscribed('default')) {
-            return response()->json([
-                'message' => 'Usuário não possui assinatura ativa'
-            ], 400);
-        }
+
+        if (!$user->subscribed('default'))
+            return response()->json(['message' => 'Usuário não possui assinatura ativa'], 400);
 
         try {
-            $url = $user->billingPortalUrl(
-                config('app.frontend_url') . '/account'
-            );
+            $url = $user->billingPortalUrl($request->validated()['return_url']);
             return response()->json(['portal_url' => $url]);
         } catch (\Exception $e) {
             Log::error('Stripe portal error: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Erro ao criar portal'
-            ], 500);
+            return response()->json(['message' => 'Erro ao criar portal'], 500);
         }
     }
 
@@ -218,7 +211,7 @@ class StripeController extends Controller
         if ($user) {
             // Find and cancel the Cashier subscription
             $cashierSubscription = $user->subscriptions()->where('stripe_id', $subscription->id)->first();
-            
+
             if ($cashierSubscription) {
                 // Mark subscription as cancelled in Cashier
                 $cashierSubscription->update([

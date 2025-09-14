@@ -4,7 +4,7 @@ namespace App\Http\Requests\Stripe;
 
 use App\Http\Requests\BaseAuthenticatedRequest;
 
-class StripeRequest extends BaseAuthenticatedRequest
+class StripePortalRequest extends BaseAuthenticatedRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,7 +12,7 @@ class StripeRequest extends BaseAuthenticatedRequest
     public function rules(): array
     {
         $rules = [
-            'plan_id' => 'required|integer|exists:plans,id',
+            'return_url' => 'required|url',
         ];
         return array_merge_recursive(parent::rules(), $rules);
     }
