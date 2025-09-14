@@ -37,8 +37,8 @@ class StripeController extends Controller
             }
 
             $checkout = $subscription->checkout([
-                'success_url' => config('app.frontend_url') . '/success?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => config('app.frontend_url') . '/cancel',
+                'success_url' => $request->validated()['return_success_url'] . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => $request->validated()['return_cancel_url'],
                 'metadata' => [
                     'plan_id' => $plan->id,
                     'user_id' => $user->id,
