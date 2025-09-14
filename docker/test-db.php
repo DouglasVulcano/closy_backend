@@ -24,19 +24,15 @@ try {
     ];
 
     $pdo = new PDO($dsn, $username, $password, $options);
-    
+
     // Test the connection with a simple query
     $stmt = $pdo->query('SELECT 1');
     $result = $stmt->fetch();
-    
-    if ($result && $result['1'] === '1') {
+
+    if ($pdo->query('SELECT 1')->fetchColumn() == 1) {
         echo "Database connection successful!\n";
         exit(0);
-    } else {
-        echo "Database connection failed: Invalid response\n";
-        exit(1);
     }
-    
 } catch (PDOException $e) {
     echo "Database connection failed: " . $e->getMessage() . "\n";
     exit(1);
