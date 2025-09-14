@@ -28,7 +28,12 @@ fi
 max_attempts=30
 attempt=0
 
+echo "Starting database connection tests..."
+echo "Will attempt up to $max_attempts times with 3 second intervals"
+
 while [ $attempt -lt $max_attempts ]; do
+    echo "\n=== Attempt $((attempt + 1))/$max_attempts ==="
+    
     if php /var/www/html/docker/test-db.php; then
         echo "Database connection established!"
         break
@@ -38,15 +43,28 @@ while [ $attempt -lt $max_attempts ]; do
     echo "Database not ready, attempt $attempt/$max_attempts..."
 
     if [ $attempt -eq $max_attempts ]; then
+        echo "\n=== FINAL ERROR REPORT ==="
         echo "ERROR: Failed to connect to database after $max_attempts attempts"
-        echo "Please check your database configuration:"
-        echo "Host: ${DB_HOST}"
-        echo "Port: ${DB_PORT}"
-        echo "Database: ${DB_DATABASE}"
-        echo "Username: ${DB_USERNAME}"
+        echo "\nDatabase Configuration:"
+        echo "  Host: ${DB_HOST}"
+        echo "  Port: ${DB_PORT}"
+        echo "  Database: ${DB_DATABASE}"
+        echo "  Username: ${DB_USERNAME}"
+        echo "  Password: $([ -n "$DB_PASSWORD" ] && echo '[SET]' || echo '[EMPTY]')"
+        echo "\nTroubleshooting steps:"
+        echo "1. Verify database container is running"
+        echo "2. Check network connectivity between containers"
+        echo "3. Verify database credentials"
+        echo "4. Check if database exists"
+        echo "\nContainer environment:"
+        echo "  Container hostname: $(hostname)"
+        echo "  Container IP: $(hostname -i 2>/dev/null || echo 'Unable to determine')"
+        echo "\nFor manual debugging, run:"
+        echo "  docker exec -it <container_name> php /var/www/html/docker/test-db.php"
         exit 1
     fi
 
+    echo "Waiting 3 seconds before next attempt..."
     sleep 3
 done
 
