@@ -1,0 +1,62 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile # Use Dockerfile.simple para versão mais simples
+        container_name: closy_laravel_app
+        restart: unless-stopped
+        ports:
+            - "8000:80" # Para Nginx/Apache use 80, para PHP built-in use 8000
+        volumes:
+            - ./storage:/var/www/html/storage
+            - ./.env:/var/www/html/.env
+            - ./vendor:/var/www/html/vendor
+        depends_on:
+            - db
+            - redis
+        networks:
+            - closy_network
+        env_file:
+            - .env
+
+    db:
+        image: mysql:8.0
+        container_name: closy_mysql
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: root_password
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - closy_network
+        env_file:
+            - .env
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: closy_phpmyadmin
+        restart: unless-stopped
+        ports:
+            - "8081:80"
+        environment:
+            PMA_HOST: db
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
+        depends_on:
+            - db
+        networks:
+            - closy_network
+        env_file:
+            - .env
+
+volumes:
+    mysql_data:
+
+networks:
+    closy_network:
+        driver: bridge
