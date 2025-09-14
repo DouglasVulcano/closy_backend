@@ -3,7 +3,7 @@
 use App\Http\Controllers\MessageTemplateController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->prefix('message-template')->group(function () {
+Route::middleware('auth:sanctum', 'role:PRO')->prefix('message-template')->group(function () {
     Route::get('/', [MessageTemplateController::class, 'index']);
     Route::post('/', [MessageTemplateController::class, 'store']);
     Route::get('/{id}', [MessageTemplateController::class, 'show']);

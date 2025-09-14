@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Campaign extends Model
 {
@@ -20,4 +21,12 @@ class Campaign extends Model
         'status',
         'details'
     ];
+
+    /**
+     * Get the user that owns the campaign
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
