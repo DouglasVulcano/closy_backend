@@ -34,10 +34,12 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
+        $validated = $request->validated();
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'celular' => $validated['celular'],
+            'password' => Hash::make($validated['password']),
         ]);
         $token = $user->createToken('authToken')->plainTextToken;
         return response()->json(['user' => $user, 'token' => $token], JsonResponse::HTTP_CREATED);
