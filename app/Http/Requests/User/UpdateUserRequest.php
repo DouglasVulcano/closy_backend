@@ -12,8 +12,9 @@ class UpdateUserRequest extends BaseAuthenticatedRequest
     public function rules(): array
     {
         $rules = [
-            'name' => 'required|string|max:50',
-            'celular' => 'required|string|max:20',
+            'name' => 'sometimes|string|max:50',
+            'celular' => 'sometimes|string|max:20',
+            'profile_picture' => 'sometimes|string|max:255',
         ];
         return array_merge_recursive(parent::rules(), $rules);
     }

@@ -32,6 +32,7 @@ class User extends Authenticatable implements CanResetPasswordContract
         'password',
         'celular',
         'role',
+        'profile_picture',
         'trial_ends_at',
     ];
 
@@ -111,5 +112,41 @@ class User extends Authenticatable implements CanResetPasswordContract
     public function hasPremiumAccess(): bool
     {
         return in_array($this->role, ['STARTER', 'PRO']);
+    }
+
+    public function getCelularAttribute(): ?string
+    {
+        $celular = $this->attributes['celular'] ?? null;
+        
+        if (!$celular) {
+            return null;
+        }
+        
+        // Remove qualquer formatação existente
+        $celular = preg_replace('/\D/', '', $celular);
+        
+        // Verifica se tem 11 dígitos (formato brasileiro com DDD)
+        if (strlen($celular) === 11) {
+            // Formato: (11) 91338-0413
+            return sprintf('(%s) %s%s-%s',
+                substr($celular, 0, 2),  // DDD
+                substr($celular, 2, 1),  // 9 do celular
+                substr($celular, 3, 4),  // primeiros 4 dígitos
+                substr($celular, 7, 4)   // últimos 4 dígitos
+            );
+        }
+        
+        // Verifica se tem 10 dígitos (formato antigo sem o 9)
+        if (strlen($celular) === 10) {
+            // Formato: (11) 1338-0413
+            return sprintf('(%s) %s-%s',
+                substr($celular, 0, 2),  // DDD
+                substr($celular, 2, 4),  // primeiros 4 dígitos
+                substr($celular, 6, 4)   // últimos 4 dígitos
+            );
+        }
+        
+        // Se não tem o formato esperado, retorna como está
+        return $celular;
     }
 }
