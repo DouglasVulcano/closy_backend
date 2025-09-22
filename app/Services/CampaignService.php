@@ -39,4 +39,9 @@ class CampaignService
     {
         $this->campaignRepository->delete($id);
     }
+
+    public function getStatistics(?int $userId = null): array
+    {
+        return $this->campaignRepository->getStatistics($userId);
+    }
 }

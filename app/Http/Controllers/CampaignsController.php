@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BaseAuthenticatedRequest;
 use App\Http\Requests\Campaign\{
     CampaignPaginatedRequest,
     CampaignRequest,
@@ -41,5 +42,11 @@ class CampaignsController extends Controller
     {
         $this->campaignService->delete($request->validated()['id']);
         return response()->json(null, JsonResponse::HTTP_NO_CONTENT);
+    }
+
+    public function statistics(BaseAuthenticatedRequest $request): JsonResponse
+    {
+        $statistics = $this->campaignService->getStatistics($request->validated()['user_id']);
+        return response()->json($statistics, JsonResponse::HTTP_OK);
     }
 }
