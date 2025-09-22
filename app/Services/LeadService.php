@@ -34,4 +34,9 @@ class LeadService
     {
         $this->leadRepository->delete($id);
     }
+
+    public function getStatistics(int $user_id): array
+    {
+        return $this->leadRepository->getStatistics($user_id);
+    }
 }

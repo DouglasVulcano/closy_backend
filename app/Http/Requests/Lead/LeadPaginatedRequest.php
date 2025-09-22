@@ -19,6 +19,9 @@ class LeadPaginatedRequest extends BasePaginationRequest
         if ($this->route('status')) {
             $this->merge(['status' => $this->route('status')]);
         }
+        if ($this->route('email')) {
+            $this->merge(['email' => $this->route('email')]);
+        }
         if ($this->route('campaign_id')) {
             $this->merge(['campaign_id' => $this->route('campaign_id')]);
         }
@@ -31,6 +34,7 @@ class LeadPaginatedRequest extends BasePaginationRequest
     {
         $rules = [
             'name' => ['sometimes', 'string', 'max:50'],
+            'email' => ['sometimes', 'string', 'max:255'],
             'status' => ['sometimes', 'string', 'in:new,contacted,qualified,converted,lost'],
             'campaign_id' => ['sometimes', 'integer', Rule::exists('campaigns', 'id')
                 ->where('user_id', $this->user_id)],

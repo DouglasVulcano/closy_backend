@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BaseAuthenticatedRequest;
 use App\Http\Requests\Lead\{LeadPaginatedRequest, LeadRequest, PublicCreateLeadRequest, UpdateLeadStatusRequest};
 use Illuminate\Http\{JsonResponse};
 use App\Services\LeadService;
@@ -42,5 +43,11 @@ class LeadController extends Controller
     {
         $this->leadService->delete($request->validated()['id']);
         return response()->json(null, JsonResponse::HTTP_NO_CONTENT);
+    }
+
+    public function statistics(BaseAuthenticatedRequest $request)
+    {
+        $statistics = $this->leadService->getStatistics($request->validated()['user_id']);
+        return response()->json($statistics, JsonResponse::HTTP_OK);
     }
 }
