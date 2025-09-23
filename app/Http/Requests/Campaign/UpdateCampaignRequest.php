@@ -19,6 +19,7 @@ class UpdateCampaignRequest extends CampaignRequest
             'start_date' => 'sometimes|date',
             'end_date' => 'sometimes|date|after:start_date',
             'details' => 'sometimes|string',
+            'seo' => 'sometimes|string',
         ];
         return array_merge_recursive(parent::rules(), $rules);
     }

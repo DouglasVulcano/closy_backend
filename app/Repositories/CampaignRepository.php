@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Campaign;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,11 @@ class CampaignRepository extends BaseRepository
     protected function getModelClass(): string
     {
         return Campaign::class;
+    }
+
+    public function getAllByUserId(int $userId): Collection
+    {
+        return $this->model::where('user_id', $userId)->get();
     }
 
     /**

@@ -21,6 +21,11 @@ class CampaignsController extends Controller
         return response()->json($this->campaignService->getPaginated($request->validated()), JsonResponse::HTTP_OK);
     }
 
+    public function getAll(BaseAuthenticatedRequest $request): JsonResponse
+    {
+        return response()->json($this->campaignService->getAllByUserId($request->validated()['user_id']), JsonResponse::HTTP_OK);
+    }
+
     public function store(CreateCampaignRequest $request): JsonResponse
     {
         $campaign = $this->campaignService->create($request->validated());

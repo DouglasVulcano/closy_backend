@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Campaign;
 use App\Repositories\CampaignRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class CampaignService
@@ -13,6 +14,11 @@ class CampaignService
     public function getPaginated(array $params): LengthAwarePaginator
     {
         return $this->campaignRepository->getPaginated($params);
+    }
+
+    public function getAllByUserId(int $userId): Collection
+    {
+        return $this->campaignRepository->getAllByUserId($userId);
     }
 
     public function findById(int $id): Campaign
